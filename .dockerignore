@@ -1,0 +1,11 @@
+.dockerignore
+docker*
+docker*.*
+.gitignore
+.venv
+*/build*
+*/node_modules
+*.md
+nginx
+*/__pycache__
+.env

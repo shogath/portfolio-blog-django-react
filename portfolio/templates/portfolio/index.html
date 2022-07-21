@@ -1,0 +1,60 @@
+{% extends 'portfolio/base.html' %}
+{% load chunk_filter %}
+{% load paginator_tags %}
+ 
+{% block title %}Portfolio{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<header id="portfolio">
+  <a href="#"><img src="" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+  <div class="w3-container">
+  <h1><b>My Projects</b></h1>
+  <div class="w3-section w3-bottombar">
+  </div>
+  </div>
+</header>
+
+  <!-- First Photo Grid-->
+  {% for chunk in all_projects|chunks:3 %}
+  <div class="w3-row-padding">
+    {% for project in chunk %}
+    <div class="w3-third w3-container w3-margin-bottom">
+      <a href="{% url 'project-details' project.slug %}" class="hover-link-img">
+        <img src="{{ project.image.url }}" alt="{{ project.title }}" style="width:100%">
+        <div class="w3-container w3-white">
+          <p id="title"><b>{{ project.title }}</b></p>
+          <p>{{ project.excerpt|safe }}</p>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+  <!-- Pagination -->
+  <div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+      {% if page_obj.has_previous %}
+        <a href="{% url 'index-page' %}?page={{ page_obj.previous_page_number }}" class="w3-bar-item w3-button w3-hover-black">«</a>
+      {% endif %}
+      {% get_proper_elided_page_range paginator page_obj.number 2 2 as page_range %}
+      {% for page_number in page_range %}
+        {% if page_number == page_obj.paginator.ELLIPSIS %}
+          <span class="w3-bar-item">{{page_number}}</span>
+        {% else %}
+          <a
+              href="?page={{ page_number }}"
+              class="asd w3-bar-item w3-button {% if page_number == page_obj.number %}w3-black{% else %}w3-hover-black{% endif %}"
+          >
+              {{page_number}}
+          </a>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="{% url 'index-page' %}?page={{ page_obj.next_page_number }}" class="w3-bar-item w3-button w3-hover-black">»</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

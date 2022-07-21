@@ -1,0 +1,59 @@
+version: "3.9"
+services:
+  web:
+    restart: always
+    build: .
+    command: >
+      sh -c "python manage.py makemigrations &&
+            python manage.py migrate &&
+            python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USER --email $DJANGO_SUPERUSER_EMAIL &&
+            python manage.py collectstatic --noinput &&
+            python manage.py dummy_db_data &&
+            gunicorn --bind :8000 --workers 3 portfolio_site.wsgi"
+    env_file:
+      - ./.env
+    depends_on:
+       - redis
+       - db
+    networks:
+      - portfolio-network
+    volumes:
+      - static:/app/static/
+      - files:/app/uploads/
+
+  nginx:
+    restart: always
+    build: ./nginx
+    volumes:
+      - static:/usr/src/app/static/
+      - files:/usr/src/app/uploads/
+    ports:
+      - 8000:8000
+      - 443:443
+    depends_on:
+      - web
+    networks:
+      - portfolio-network
+
+  redis:
+    restart: always
+    image: "redis:7-alpine"
+    networks:
+      - portfolio-network
+
+  db:
+    image: "postgres:14.4-alpine"
+    restart: always
+    environment:
+      - POSTGRES_DB=portfolio
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_password
+    networks:
+      - portfolio-network
+
+networks:
+  portfolio-network:
+    name: portfolio-network
+volumes:
+  static:
+  files:
