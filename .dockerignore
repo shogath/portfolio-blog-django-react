@@ -9,3 +9,4 @@ docker*.*
 nginx
 */__pycache__
 .env
+readme_assets
