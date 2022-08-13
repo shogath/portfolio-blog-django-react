@@ -69,4 +69,4 @@ def add_comment(request):
     comment.post = post
     comment.save()
 
-    return Response('asdasd')
+    return Response(status=status.HTTP_200_OK)
