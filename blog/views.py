@@ -16,6 +16,9 @@ from .serializers import (PostSerializer, PostDetailsSerializer,
 
 
 class BlogPostPagination(PageNumberPagination):
+    """
+    Pagination class for blog posts
+    """
     page_size = 3
     page_size_query_param = 'page_size'
 
@@ -30,12 +33,19 @@ class BlogPostPagination(PageNumberPagination):
 
 
 class AllBlogPostsView(ListAPIView):
+    """
+    GET: returns paginated list of blog posts `models.Post`
+    Uses custom serializer - `blog.serializers.PostSerializer`
+    """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = BlogPostPagination
 
 
 class PopularBlogPostsView(ListAPIView):
+    """
+    GET: returns top popular blog posts based on amount of comments
+    """
     queryset = Post.objects.all().annotate(
         num_comments=Count('comments')).order_by('-num_comments')[:4]
     serializer_class = PopularPostSerializer
@@ -44,6 +54,9 @@ class PopularBlogPostsView(ListAPIView):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_blog_post(request, slug):
+    """
+    GET: returns single blog post `blog.models.Post`
+    """
     try:
         post = Post.objects.get(slug=slug)
     except Post.DoesNotExist:
@@ -58,6 +71,10 @@ def get_blog_post(request, slug):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_comment(request):
+    """
+    POST: checks if user is authenticated
+          creates a new comment for a blog post
+    """
     try:
         post = Post.objects.get(slug=request.data['post'])
     except Post.DoesNotExist:

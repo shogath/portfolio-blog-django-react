@@ -6,6 +6,9 @@ from .models import Post, Comment
 
 
 class PostSerializer(ModelSerializer):
+    """
+    Serializer for blog.views.AllBlogPostsView
+    """
     date = DateTimeField(format="%d-%m-%Y %H:%M:%S")
 
     class Meta:
@@ -15,6 +18,9 @@ class PostSerializer(ModelSerializer):
 
 
 class PopularPostSerializer(ModelSerializer):
+    """
+    Serializer for blog.views.PopularBlogPostsView
+    """
     date = DateTimeField(format="%d-%m-%Y %H:%M:%S")
 
     class Meta:
@@ -23,6 +29,9 @@ class PopularPostSerializer(ModelSerializer):
 
 
 class CommentSerializer(ModelSerializer):
+    """
+    Serializer used in PostDetailsSerializer
+    """
     username = CharField(source="user.username", read_only=True)
 
     class Meta:
@@ -31,6 +40,10 @@ class CommentSerializer(ModelSerializer):
 
 
 class PostDetailsSerializer(ModelSerializer):
+    """
+    Serializer for blog.views.get_blog_post
+    Adds paginated comments to blog post data
+    """
     date = DateTimeField(format="%d-%m-%Y %H:%M:%S")
     comments = SerializerMethodField('paginated_comments')
 

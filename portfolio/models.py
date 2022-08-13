@@ -6,6 +6,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class PortfolioProject(models.Model):
+    """
+    Stores a single PortfolioProject entry
+    """
     title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, db_index=True)
     image = models.ImageField(upload_to='projects')
@@ -18,6 +21,9 @@ class PortfolioProject(models.Model):
 
 
 class Contact(models.Model):
+    """
+    Stores a single Contact form entry
+    """
     name = models.CharField(max_length=100)
     email = models.EmailField()
     message = models.TextField()

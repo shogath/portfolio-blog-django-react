@@ -8,7 +8,7 @@ from blog.models import Post
 
 class Command(Command):
     """
-    Add dummy data to database.
+    Add dummy data to database for demonstrating or testing purposes.
     """
 
     def handle(self, *args, **options):

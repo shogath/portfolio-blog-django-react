@@ -7,12 +7,19 @@ from .models import User
 
 
 def validate_email(value):
+    """
+    Function to ckeck if user with provided email already exists
+    """
     if User.objects.filter(email=value).exists():
         raise ValidationError(
             (f"User with email '{value}' already exists."), params={'value': value})
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Serializer for jwt_auth.views.MyObtainTokenPairView
+    Adds username to jwt token
+    """
 
     default_error_messages = {
         "no_active_account": "Incorrect email or password."
@@ -28,6 +35,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for jwt_auth.views.RegisterView
+    Checks if provideed user data is valid and creates a new user
+    """
+
     email = serializers.EmailField(
         required=True,
         validators=[validate_email]

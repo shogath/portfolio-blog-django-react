@@ -7,6 +7,10 @@ from jwt_auth.models import User
 
 
 class Post(models.Model):
+    """
+    Stores a single blog post entry
+    `ordering` by `date` in descending order
+    """
     title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, db_index=True)
     image = models.ImageField()
@@ -26,6 +30,10 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    """
+    Stores a single post comment entry
+    `ordering` by `id` in descending order
+    """
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')

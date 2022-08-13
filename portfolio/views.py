@@ -16,14 +16,24 @@ from .forms import ContactForm
 
 
 def ratelimited_error(request, exception):
+    """
+    Handle RateLimited exception
+    """
     return HttpResponse(status=429)
 
 
 def page_not_found_view(request, exception):
+    """
+    Handle 404 status code
+    """
     return render(request, 'portfolio/404.html', status=404)
 
 
 class IndexView(ListView):
+    """
+    GET: returns paginated list of PortfolioProject
+         ordered by `id` in descending order
+    """
     template_name = 'portfolio/index.html'
     model = PortfolioProject
     ordering = ['-id']
@@ -32,11 +42,15 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        # page name to use in CSS
         context['page'] = 'index'
         return context
 
 
 def project_details(request, slug):
+    """
+    GET: returns a single PortfolioProject
+    """
     project = get_object_or_404(PortfolioProject, slug=slug)
 
     return render(request, 'portfolio/project-details.html', {
@@ -45,11 +59,21 @@ def project_details(request, slug):
 
 
 def about(request):
+    """
+    GET: returns About page template
+    """
     return render(request, 'portfolio/about.html', {'page': 'about'})
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def contact(request):
+    """
+    GET: returns Contact page template and forms.ContactForm
+    POST: checks if form is valid 
+          saves form model to database
+          uses django.core.mail.send_mail to send an email
+    POST requests are ratelimitet based on IP
+    """
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():

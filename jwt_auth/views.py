@@ -8,10 +8,19 @@ from .serializers import MyTokenObtainPairSerializer, RegisterSerializer
 
 
 class MyObtainTokenPairView(TokenObtainPairView):
+    """
+    GET: Takes a set of user credentials and returns an access and refresh JSON web
+         token pair to prove the authentication of those credentials.
+    Uses custom serializer - jwt_auth.serializers.MyTokenObtainPairSerializer
+    """
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
 
 
 class RegisterView(generics.CreateAPIView):
+    """
+    POST: creates new model.User entity
+    Uses custom serializer - jwt_auth.serializers.RegisterSerializer
+    """
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
