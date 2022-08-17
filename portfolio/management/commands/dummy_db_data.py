@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from django.core.management.commands.migrate import Command
 
 from portfolio.models import PortfolioProject
