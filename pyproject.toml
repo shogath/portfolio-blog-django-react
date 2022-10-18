@@ -16,8 +16,8 @@ django-cors-headers = "^3.13.0"
 python-dotenv = "^0.20.0"
 django-ratelimit = "^3.0.1"
 redis = "^4.3.4"
-psycopg2 = "^2.9.3"
 gunicorn = "^20.1.0"
+psycopg2-binary = "^2.9.4"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
