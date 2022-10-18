@@ -18,6 +18,7 @@ Simple portfolio and a blog built with django and react.
  - **Database**: Postgres
  - **Cache**: Redis (used for Django Ratelimit)
  - **Auth**: JWT authentication
+ - **Celery**: Used to send an email from Contact form
 
 ### **Portfolio main page**
 
