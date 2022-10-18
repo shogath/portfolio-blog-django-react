@@ -22,7 +22,7 @@ class ContactViewTest(TestCase):
                 }
             }
         ):
-            with patch('portfolio.views.send_mail') as mocked_send_mail:
+            with patch('portfolio.views.send_contact_email_task.delay') as mocked_send_mail:
                 response = self.client.post('/contact/', secure=True,
                                             data={'name': 'Name', 'email': 'asd@asd.asd', 'message': 'message'})
                 self.assertTrue(mocked_send_mail.called)
@@ -43,8 +43,8 @@ class RatelimiterTest(TestCase):
                 }
             }
         ):
-            with patch('portfolio.views.send_mail'):
-                for i in range(7):
+            with patch('portfolio.views.send_contact_email_task.delay'):
+                for _ in range(7):
                     response = self.client.post('/contact/', secure=True,
                                                 data={'name': 'Name', 'email': 'asd@asd.asd', 'message': 'message'})
                 self.assertEqual(response.status_code, 429)

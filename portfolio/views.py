@@ -2,15 +2,13 @@ from typing import Any, Dict
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import ListView
-from django.conf import settings
-from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from smtplib import SMTPException
 
 from ratelimit.decorators import ratelimit
 
 from .models import PortfolioProject
 from .forms import ContactForm
+from .tasks import send_contact_email_task
 
 # Create your views here.
 
@@ -71,7 +69,7 @@ def contact(request):
     GET: returns Contact page template and forms.ContactForm
     POST: checks if form is valid 
           saves form model to database
-          uses django.core.mail.send_mail to send an email
+          creates a Celery task to send an email
     POST requests are ratelimitet based on IP
     """
     if request.method == 'POST':
@@ -80,13 +78,7 @@ def contact(request):
             form.save()
             email_subject = f'New contact {form.cleaned_data["name"]}: {form.cleaned_data["email"]}'
             email_message = form.cleaned_data['message']
-            try:
-                send_mail(email_subject, email_message,
-                          settings.DJANGO_CONTACT_EMAIL, settings.DJANGO_ADMIN_EMAILS)
-            except SMTPException as e:          # It will catch other errors related to SMTP.
-                print('There was an error sending an email.' + e)
-            except:                             # It will catch All other possible errors.
-                print("Mail Sending Failed!")
+            send_contact_email_task.delay(email_subject, email_message)
             return render(request, 'portfolio/contact_success.html')
     else:
         form = ContactForm()

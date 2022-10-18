@@ -9,4 +9,7 @@ docker*.*
 nginx
 */__pycache__
 .env
+.vscode
+.git
+Dockerfile
 readme_assets

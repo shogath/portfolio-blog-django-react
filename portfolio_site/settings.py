@@ -250,3 +250,8 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT', 2525)
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'user')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'pass')
+
+
+# Celery settings
+CELERY_BROKER_URL = os.environ.get('REDIS_LOCATION', 'redis://127.0.0.1:6379')
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_LOCATION', 'redis://127.0.0.1:6379')
