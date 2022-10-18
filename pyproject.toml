@@ -18,9 +18,12 @@ django-ratelimit = "^3.0.1"
 redis = "^4.3.4"
 gunicorn = "^20.1.0"
 psycopg2-binary = "^2.9.4"
+celery = "^5.2.7"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
+black = "^22.10.0"
+pylint = "^2.15.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

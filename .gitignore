@@ -1,5 +1,7 @@
 __pycache__
 .env
+.vscode
+.venv
 *.sqlite3
 /static
 

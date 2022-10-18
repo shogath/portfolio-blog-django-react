@@ -10,6 +10,7 @@ services:
             python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USER --email $DJANGO_SUPERUSER_EMAIL &&
             python manage.py collectstatic --noinput &&
             python manage.py dummy_db_data &&
+            python -m celery -A portfolio_site worker -l info --detach &&
             gunicorn --bind :8000 --workers 3 portfolio_site.wsgi"
     env_file:
       - ./.env
